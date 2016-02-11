@@ -10,20 +10,20 @@ public class MoveToFront {
 	public static void encode() {
 		while (!BinaryStdIn.isEmpty()) {
 			char temp = BinaryStdIn.readChar();
-			char[] newAscii = new char[256];
-			int fix = 1; // to reserve first index
-			newAscii[0] = temp; // move to front
+			boolean found = false; // marker for when we find the char
 
 			// get character index and move to front
-			for (int i = 0; i < ascii.length; i++) {
-				newAscii[i + fix] = ascii[i]; // reserve first index
+			for (int i = ascii.length - 1; i >= 0; i--) {
+
 				if (temp == ascii[i]) {
+					found = true;
 					BinaryStdOut.write(i, 8);
-					// System.out.println(i);
-					fix = 0;
 				}
+
+				if (found && i > 0)
+					ascii[i] = ascii[i - 1];
 			}
-			ascii = newAscii;
+			ascii[0] = temp; // move to front
 		}
 		BinaryStdOut.flush();
 		BinaryStdOut.close();
@@ -55,7 +55,6 @@ public class MoveToFront {
 		for (int i = 0; i < 256; i++) {
 			ascii[i] = (char) i;
 		}
-
 		if (args[0].equals("-"))
 			encode();
 		else if (args[0].equals("+"))
