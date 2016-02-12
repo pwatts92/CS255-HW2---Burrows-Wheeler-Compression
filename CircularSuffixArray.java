@@ -8,6 +8,11 @@ public class CircularSuffixArray {
 	public static String[] circularSuffixArray; //the data structure which contains the Circular Suffix Array
 	
 	public CircularSuffixArray(String s) { // circular suffix array of s
+	
+		// check if argument is null
+		if (s == null)
+			throw new java.lang.NullPointerException("String s is null");
+	
 		length = s.length();
 		circularSuffixArray = new String[length];
 		
@@ -60,10 +65,11 @@ public class CircularSuffixArray {
 	}
 
 	public int index(int i) { // returns index of ith sorted suffix
+		if (i < 0 || i > (length - 1))
+			throw new java.lang.IndexOutOfBoundsException();
 		return index[i];
 	}
 
 	public static void main(String[] args) { // unit testing (not graded)
-		
 	}
 }

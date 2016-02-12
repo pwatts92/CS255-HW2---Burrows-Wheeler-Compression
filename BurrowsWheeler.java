@@ -27,8 +27,10 @@ public class BurrowsWheeler {
 			}
 		}
 
-		String transString = index + new String(transChars);
+		BinaryStdOut.write(index); // needs to be written before the string
+		String transString = new String(transChars);
 		BinaryStdOut.write(transString);
+		BinaryStdOut.flush(); // needed to flush
 	}
 
 	// apply Burrows-Wheeler inverse transform, reading from standard input and
@@ -95,14 +97,15 @@ public class BurrowsWheeler {
 		}
 
 		BinaryStdOut.write(new String(originalString));
+		BinaryStdOut.flush();
 	}
 
 	// if args[0] is '-', apply Burrows-Wheeler transform
 	// if args[0] is '+', apply Burrows-Wheeler inverse transform
 	public static void main(String[] args) {
-		if (args[0] == "-")
+		if (args[0].equals("-")) // needed to use .equals instead of ==
 			transform();
-		else if (args[0] == "+")
+		else if (args[0].equals("+"))
 			inverseTransform();
 	}
 }
