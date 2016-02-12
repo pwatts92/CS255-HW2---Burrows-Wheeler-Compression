@@ -304,6 +304,48 @@ Transform function is literally the Circular Suffix Array with an additional 2$N
 \end{proof}
 
 
+\section{Move-To-Front}
+ The main idea of move-to-front encoding is to maintain an ordered sequence of the characters in the alphabet, and repeatedly read in a character from the input message, print out the position in which that character appears, and move that character to the front of the sequence.
+ 
+ 
+
+%%%%%%% end Problem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Mathematical Formulation}
+We maintain an array with all the ascii symbols in it in an ordered fashion depending on the input given. We read N characters from the input, where N is the length of the given String, and we keep track of the current position of that character in out ascii array.
+
+\section{An Efficient Solution}
+For encoding or decoding, we keep an array of size 256 that holds all the ascii characters in their original order. For encoding, we then proceed to read the input character by character. For every character, we figure out the current index of that character in the ascii array by starting a linear search from ascii[255] down. Once we find the character in the ascii array, we print out the index, and then we shift the rest of the elements one index forward. Then we finally just make the 0th element be the current character.
+
+For decoding, for every character we read, we get the int value of that character and store it in a variable, lets call it temp. We then use this value and we shift all elements before ascii[temp] one index forward. We then proceed to assign ascii[0] the original character at ascii[temp] and we print it out using BinaryStdOut.
+
+\section{Correctness}
+
+\begin{proposition}
+These algorithms takes a string and maintains an ordered sequence of characters in the alphabet where characters in the input appear at the front of the sequence.
+\end{proposition}
+
+\begin{proof}
+If we maintain an array with the ascii characters and every time we read in a character we move that character into the 0th element of the ascii array, the algorithm will create an ordered sequence of the alphabet were characters that are used more often are at the front of the sequence
+\end{proof}
+
+\section{Analysis}
+
+\begin{proposition}
+\label{numq}
+Both encoding and decoding take R*N in the worst case where R is the size of the alphabet and N is the length of the String. But in practice, we can have a smaller alphabet and for every character we might only need to go through 26 characters, a low number which could be considered constant. Because of this, we can have a run time proportional to N + R.
+The space complexity is proportional to N + R
+
+\end{proposition}
+
+\begin{proof}
+If we were to get an input where none of the characters repeat, the algorithm would go through the entire ascii array for every character it reads in, resulting in a running time of R*N. In a typical English text, there will be a lot of repetition and certain characters will appear much more than others. Those characters will be found even more quickly the next time they show up. So in practice, we basically have a smaller alphabet to work with and for every character we might only need to go through 26 characters, a low number which could be considered constant.
+
+
+To store the information, we only use an array of size R and we store each character only once, resulting in a space complexity proportional to N + R
+\end{proof}
+
+
 %%%%%%% end Solution %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
