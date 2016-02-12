@@ -1,0 +1,309 @@
+% Use this template to write your solutions to COS 423 problem sets
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsfonts, amsthm, amssymb, algorithm, graphicx, mathtools,xfrac}
+\usepackage[noend]{algpseudocode}
+\usepackage{fancyhdr, lastpage}
+\usepackage[vmargin=1.20in,hmargin=1.25in,centering,letterpaper]{geometry}
+\setlength{\headsep}{.50in}
+\setlength{\headheight}{15pt}
+
+% Landau notation
+\DeclareMathOperator{\BigOm}{\mathcal{O}}
+\newcommand{\BigOh}[1]{\BigOm\left({#1}\right)}
+\DeclareMathOperator{\BigTm}{\Theta}
+\newcommand{\BigTheta}[1]{\BigTm\left({#1}\right)}
+\DeclareMathOperator{\BigWm}{\Omega}
+\newcommand{\BigOmega}[1]{\BigWm\left({#1}\right)}
+\DeclareMathOperator{\LittleOm}{\mathrm{o}}
+\newcommand{\LittleOh}[1]{\LittleOm\left({#1}\right)}
+\DeclareMathOperator{\LittleWm}{\omega}
+\newcommand{\LittleOmega}[1]{\LittleWm\left({#1}\right)}
+
+% argmin and argmax
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Exp}{\mathbb{E}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\sign}{\mathrm{sign\ }}
+\newcommand{\abs}{\mathrm{abs\ }}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\zo}{\{0, 1\}}
+\newcommand{\SAT}{\mathit{SAT}}
+\renewcommand{\P}{\mathbf{P}}
+\newcommand{\NP}{\mathbf{NP}}
+\newcommand{\coNP}{\co{NP}}
+\newcommand{\co}[1]{\mathbf{co#1}}
+\renewcommand{\Pr}{\mathop{\mathrm{Pr}}}
+
+% theorems, lemmas, invariants, etc.
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{invariant}[theorem]{Invariant}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{property}[theorem]{Property}
+\newtheorem{proposition}[theorem]{Proposition}
+
+% piecewise functions
+\newenvironment{piecewise}{\left\{\begin{array}{l@{,\ }l}}
+{\end{array}\right.}
+
+% paired delimiters
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\len}{|}{|}
+\DeclarePairedDelimiter{\set}{\{}{\}}
+
+\makeatletter
+\@addtoreset{equation}{section}
+\makeatother
+\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+
+% algorithms
+\algnewcommand\algorithmicinput{\textbf{INPUT:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{OUTPUT:}}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+
+
+% Formating Macros
+
+\pagestyle{fancy}
+\lhead{\sc \hmwkClass $\;\;\cdot \;\;$ \hmwkSemester $\;\;\cdot\;\;$
+Problem \hmwkAssignmentNum.\hmwkProblemNum}
+%\chead{\sc Problem \hmwkAssignmentNum.\hmwkProblemNum}
+%\chead{}
+\rhead{\em \hmwkAuthorName\ $($\hmwkAuthorID$)$}
+\cfoot{}
+\lfoot{}
+\rfoot{\sc Page\ \thepage\ of\ \protect\pageref{LastPage}}
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\fancypagestyle{fancycollab}
+{
+    \lfoot{\em Collaborators: \hmwkCollaborators}
+}
+
+\fancypagestyle{problemstatement}
+{
+    \rhead{}
+    \lfoot{}
+}
+
+%%%%%% Begin document with header and title %%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%% Header Information %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Shouldn't need to change these
+\newcommand{\hmwkClass}{COS 423}
+\newcommand{\hmwkSemester}{Spring 2013}
+
+%%% Your name, in standard First Last format
+\newcommand{\hmwkAuthorName}{Parker Watts}
+%%% Your NetID
+\newcommand{\hmwkAuthorID}{watts}
+
+%%% The problem set number (just the number)
+\newcommand{\hmwkAssignmentNum}{0}
+
+%%% The problem number (just the number)
+\newcommand{\hmwkProblemNum}{1}
+
+%%% A list of your collaborators' NetIDs, separated by ", ".
+%%% You can use a new line ("\\") in the middle to prevent a long
+%%% list from overflowing.
+\newcommand{\hmwkCollaborators}{Rafael Zuniga}
+%%% Sets the collaborator list to appear on the first page
+\thispagestyle{fancycollab}
+
+%%%%%%% begin Solution %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%% begin Problem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Burrows-Wheeler Data Compression Algorithm}
+ Implement the Burrows-Wheeler data compression algorithm. This revolutionary algorithm outcompresses gzip and PKZIP, is relatively easy to implement, and is not protected by any patents. It forms the basis of the Unix compression utility bzip2.
+
+The Burrows-Wheeler compression algorithm consists of three algorithmic components, which are applied in succession:
+
+    Burrows-Wheeler transform. Given a typical English text file, transform it into a text file in which sequences of the same character occur near each other many times.
+
+    Move-to-front encoding. Given a text file in which sequences of the same character occur near each other many times, convert it into a text file in which certain characters appear more frequently than others.
+
+    Huffman compression. Given a text file in which certain characters appear more frequently than others, compress it by encoding frequently occurring characters with short codewords and rare ones with long codewords. 
+
+Step 3 is the one that compresses the message: it is particularly effective because Steps 1 and 2 result in a text file in which certain characters appear much more frequently than others. To expand a message, apply the inverse operations in reverse order: first apply the Huffman expansion, then the move-to-front decoding, and finally the inverse Burrows-Wheeler transform. Your task is to implement Burrows-Wheeler and move-to-front components efficiently. 
+
+%%%%%%% end Problem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+
+%%%%%%% begin Problem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Circular Suffix Array}
+ To efficiently implement the key component in the Burrows-Wheeler transform, you will use a fundamental data structure known as the circular suffix array, which describes the abstraction of a sorted array of the $N$ circular suffixes of a string of length $N$. We define index[$i$] to be the index of the original suffix that appears $i$th in the sorted array.
+ 
+ 
+
+%%%%%%% end Problem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Mathematical Formulation}
+We must create a $N$ by $N$ array of characters, beginning with element $0$ of the array as the original string we are analysing, then element $1$ being the original string shifted one element to the left, etc.
+
+We then sort the rows of the array, and then return the $N$th column 
+of this array, preceded by the index in which the original string 
+appears in the sorted array.
+
+\section{An Efficient Solution}
+
+Our algorithm casts the original string as an Array List of Characters. 
+Since a string is effectively an array of characters, we create the 
+$N$ by $N$ array of characters as an array of strings. We fill this 
+array of strings by removing the first element of the Array List, 
+adding it to the End of the Array List, then casting the current 
+elements of the Array List to a string and adding it to the array of 
+strings, then repeating the process until the array is full. We also 
+append the original index number to each string, to build the index 
+array later.
+
+We sort the string array, and then use the int values we appended to
+those strings to build the necessary index array. Once this is
+done, it is trivial to return the $N$the column.
+
+
+\begin{algorithm}[H]
+\caption{Circular Suffix Array.}
+\begin{algorithmic}
+    \Procedure{CircularSuffixArray}{String $S$}
+        \State $ArrayList \gets$ \Call{MakeArrayList}{$S$}
+        \State $Suffix \gets$ \Call{MakeArray}{$String[]$}
+        \For{$i < Length of S$}
+        		\State \Call{Shift Left}{$ArrayList$}
+            \State \Call{add}{$Suffix, String \gets ArrayList \gets String${$i$}}
+        \EndFor
+        \State $Index \gets$ \Call{MakeArray}{$int[]$}
+        
+        \For{$String \in Suffix$}
+            \State $Index \gets$ \Call{add}{$Integer \in String$}
+        \EndFor
+    \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+
+\section{Correctness}
+
+\begin{proposition}
+The algorithm creates an $N$ by $N$ array of characters, iterated correctly, sorted, and with a corresponding index
+\end{proposition}
+
+\begin{proof}
+Due to the inherent type of ArrayList, moving an item on the list from the head to the tail shifts the entire list one space to the left. By both keeping track of the length of the string, and appending an int value to the end of the strings, we can sort the string array using the Arrays.sort quicksort function, and then recover that int value to construct the index. Keeping the length variable is also what allows us to pass the $N$th column of the array as a string to the Burrows Wheeler Class
+\end{proof}
+
+\section{Analysis}
+
+\begin{proposition}
+\label{numq}
+The Circular Suffix Array function operates in $3NlogN$ time.
+\end{proposition}
+
+\begin{proof}
+Because we use the Array List to construct the circular suffix array, it takes only $N$ time. Constructing the index also uses $N$ time, and the sorting of the arrays themselves takes $NlogN$ as is standard for quicksort.
+\end{proof}
+
+
+%%%%%%% end Solution %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%% begin Problem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Burrows-Wheeler Transform}
+ To efficiently implement the key component in the Burrows-Wheeler transform, you will use a fundamental data structure known as the circular suffix array, which describes the abstraction of a sorted array of the $N$ circular suffixes of a string of length $N$. We define index[$i$] to be the index of the original suffix that appears $i$th in the sorted array.
+ 
+ 
+
+%%%%%%% end Problem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Mathematical Formulation}
+For the transform function, we simply create a circular suffix array (as above), return the $N$th column, then return an index value such that $index[i]$ == $0$
+
+The inverse transform is slightly trickier. With an input of an index of the original string and the transformed string, we recreate the original. First, we sort the transformed array to regain the first column of the circular suffix array, then we recreate the index array by determining the relative positions of the iterations of characters. With this reconstructed index, we follow along it iteratively to determine what the correct sequence of characters was.
+
+\section{An Efficient Solution}
+
+Our transform function consists almost entirely of our earlier circular suffix array's formation, and has such has little to expand on here.
+
+The inverse function, after retaining the correct values for the transformed string, the sorted string, and the original string's index, we construct a hashmap with each character that appears in the string as a key, and the corresponding value being an Array List of integers which represent the positions that each of those characters occupy in the transformed string. We use this hashmap to build the next array, starting at element $0$, and using the smallest possible index value for each given character in the sorted string.
+
+With that done, we find the corresponding index for the original string in order to get the first and last character, and then follow the pattern of next characters outlined in the index array to reconstruct the string.
+
+\begin{algorithm}[H]
+\caption{Burrows Wheeler Transform}
+\begin{algorithmic}
+    \Procedure{Transform}{}
+        \State $String S \gets$ \Call{Binary Input}{$String$}
+        \State $Suffix \gets$ \Call{Circular Suffix Array}{$S$}
+        \State $String Transformed \gets$ \Call{Circular Suffix Array}{$Nth Column$}
+        \State $int Index \gets$ \Call{Get Original Suffix}{$Suffix$}
+        \State $Write \gets$ \Call{$Index$ + $Transformed$}{}
+    \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Burrows Wheeler Inverse Transform}
+\begin{algorithmic}
+    \Procedure{Inverse Transform}{}
+        \State $int- BaseIndex \gets$ \Call{Binary Input}{$int$}
+        \State $String- TransformedString \gets$ \Call{Binary Input}{$String$}
+        \State $String- SortedString \gets$ \Call{Sort}{$TransformedString$}
+		\State HashMap$\gets$ \Call{MakeHashMap}{$char, Array List$}      
+        \For{$chars \in TransformedString$}
+        		\State \Call{Add to $char$'s Array List}{Index of $char$}
+        \EndFor
+		\While{$next[] \gets !Full$}
+			\State $next[] \gets$ \Call{Hashmap $/gets ArrayList$}{Element at $currentChar$}
+		\EndWhile        
+        \State $String- OrininalString${}
+        \For{$Sequence of ints in next[] starting at 0$}
+            \State $OriginalString \gets$ \Call{add}{$SortedString${charAt{$currentInt$}}}
+        \EndFor
+        \State $Write \gets$ \Call{$OriginalString$}{}
+    \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+
+\section{Correctness}
+
+\begin{proposition}
+These algorithms take a string and transform in to and back from different sequences based on a baseline integer.
+\end{proposition}
+
+\begin{proof}
+The proof for the Transform function is effectively the same as that for the Circular Suffix Array. For the Inverse Transform function, we first use the fact that the next[] value for two strings, i and j, if next[i+1] == j, then the sorted character of i equals the transformed character of j, to build the index in successive order. Once we have that order and can start at 0, we simply iterate through the transformations (next[next[next...[first]]]) to gain the correct sequence of characters.
+\end{proof}
+
+\section{Analysis}
+
+\begin{proposition}
+\label{numq}
+The Transform function operates in $5NlogN$ time, and the Inverse Transform function operates in $3NlogN$ time.
+\end{proposition}
+
+\begin{proof}
+Transform function is literally the Circular Suffix Array with an additional 2$N$ operations for fetching the final column and collecting the correct index. The Inverse Transform's HashMap can be created in $N$ time, and its existance makes constructing the next array consume $NlogN$ time, since each character accesses the Hashmap in $logN$ time. After that, creating the actual original string using the next array takes an additional $N$.
+\end{proof}
+
+
+%%%%%%% end Solution %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
