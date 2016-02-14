@@ -202,23 +202,25 @@ done, it is trivial to return the $N$the column.
 \section{Correctness}
 
 \begin{proposition}
-The algorithm creates an $N$ by $N$ array of characters, iterated correctly, sorted, and with a corresponding index
+The algorithm creates an $N$ by $N$ array of characters, iterated correctly, sorted, and with a corresponding index of length $N$
 \end{proposition}
 
 \begin{proof}
-Due to the inherent type of ArrayList, moving an item on the list from the head to the tail shifts the entire list one space to the left. By both keeping track of the length of the string, and appending an int value to the end of the strings, we can sort the string array using the Arrays.sort quicksort function, and then recover that int value to construct the index. Keeping the length variable is also what allows us to pass the $N$th column of the array as a string to the Burrows Wheeler Class
+We begin with an input consisting of a single uncompressed string, and from this we must output the corresponding string which is ready for compression, as well as the integer from the index array pertaining to 0.
+Due to the inherent type of ArrayList, moving an item on the list from the head to the tail shifts the entire list one space to the left. By both keeping track of the length of the string, and appending an int value to the end of the strings, we can sort the string array using the Arrays.sort quicksort function, and then recover that int value to construct the index. Keeping the length variable is also what allows us to pass the $N$th column of the array as a string to the Burrows Wheeler Class. The index contains one element per row of the table, representing the original position of that string in order before the sorting occurred, and thus has $N$ elements.
 \end{proof}
 
 \section{Analysis}
 
 \begin{proposition}
 \label{numq}
-The Circular Suffix Array function operates in $3NlogN$ time.
+The Circular Suffix Array function operates in $3NlogN$ time, and utilizes $N$ squared plus $R$ space.
 \end{proposition}
 
 \begin{proof}
-Because we use the Array List to construct the circular suffix array, it takes only $N$ time. Constructing the index also uses $N$ time, and the sorting of the arrays themselves takes $NlogN$ as is standard for quicksort.
+Because we use the Array List to construct the circular suffix array, it takes only $N$ squared plus  R time. Since we are creating an $N$ by $N$ array by definition of the class, we cannot possibly go lower than $N$ squared. We avoid using the substring method for string, since strings are immutable and creating the next string for the suffix array would involve taking the previous string, creating two more strings from it, and then merging those strings into a new string, giving a total space usage of $3N$ squared, which would be unacceptable. Since the Array List is mutable, it costs only R additional space from the Array List when constructing the suffix array. Constructing the index also uses $N$ time, since appending the index on the end of the string while maintaining the length value means that extracting those strings takes N time, with a marginal increase based on the number of digits in the int. the sorting of the arrays themselves takes $NlogN$ as is intrinsic for quicksort.
 \end{proof}
+
 
 
 %%%%%%% end Solution %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -289,19 +291,24 @@ These algorithms take a string and transform in to and back from different seque
 \end{proposition}
 
 \begin{proof}
-The proof for the Transform function is effectively the same as that for the Circular Suffix Array. For the Inverse Transform function, we first use the fact that the next[] value for two strings, i and j, if next[i+1] == j, then the sorted character of i equals the transformed character of j, to build the index in successive order. Once we have that order and can start at 0, we simply iterate through the transformations (next[next[next...[first]]]) to gain the correct sequence of characters.
+The proof for the Transform function is effectively the same as that for the Circular Suffix Array with a binary string as input and the output being both the int and string produced by Circular Suffix Array. 
+
+For the Inverse Transform function, we begin with a transformed string and the index in which the original string appeared in a circular suffix array. We first use the fact that the next[] value for two strings, i and j, if next[i+1] == j, then the sorted character of i equals the transformed character of j, to build the index in successive order. Once we have that order and can start at 0, we simply iterate through the transformations (next[next[next...[first]]]) to gain the correct sequence of characters.
 \end{proof}
 
 \section{Analysis}
 
 \begin{proposition}
 \label{numq}
-The Transform function operates in $5NlogN$ time, and the Inverse Transform function operates in $3NlogN$ time.
+The Transform function operates in $5NlogN$ time, and the Inverse Transform function operates in $4NlogN$ time.
 \end{proposition}
 
 \begin{proof}
-Transform function is literally the Circular Suffix Array with an additional 2$N$ operations for fetching the final column and collecting the correct index. The Inverse Transform's HashMap can be created in $N$ time, and its existance makes constructing the next array consume $NlogN$ time, since each character accesses the Hashmap in $logN$ time. After that, creating the actual original string using the next array takes an additional $N$.
+Transform function is literally the Circular Suffix Array with an additional 2$N$ operations for fetching the final column and collecting the correct index. Fetching the column involves creating a string out of $N$ chars, one from each column, to form a single string, so it is self-evidently in $N$ time. The method for obtaining the index related to 0 can often be sublinear (in the "ABRACADABRA!" example, it completes after only one call), but in the worse case (if the desired element is at the end of the index array), it operates in $N$ time. With the proof above in mind, the total running time of the transform function, plus the circular suffix array, is $5NlogN$.
+
+The Inverse Transform's HashMap can be created in $N$ time since adding an element to the has takes constant time, as a necessary property of hash classes, and we are adding $N$ elements. Its existance makes constructing the next array consume $NlogN$ time, since each character accesses the Hashmap in $logN$ time, and we must access the map a total of $N$ times, one for each int in the index array. After the index array has been fully filled in, creating the actual original string using the next array takes an additional $2N$, in a process similar to locating the correct index in the transform function (which also may be sublinear). One the index pertaining to 0 is located, following the index in a next[next[next...[first]]] fashion, which takes $N$ time, since it will pass through each element in the index exactly once.
 \end{proof}
+
 
 
 \section{Move-To-Front}
