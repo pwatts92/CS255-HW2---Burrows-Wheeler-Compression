@@ -1,0 +1,528 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsfonts, amsthm, amssymb, algorithm, graphicx, mathtools,xfrac}
+\usepackage[noend]{algpseudocode}
+\usepackage{fancyhdr, lastpage}
+\usepackage[vmargin=1.20in,hmargin=1.25in,centering,letterpaper]{geometry}
+\setlength{\headsep}{.50in}
+\setlength{\headheight}{15pt}
+
+\graphicspath{ {images/} }
+
+% Landau notation
+\DeclareMathOperator{\BigOm}{\mathcal{O}}
+\newcommand{\BigOh}[1]{\BigOm\left({#1}\right)}
+\DeclareMathOperator{\BigTm}{\Theta}
+\newcommand{\BigTheta}[1]{\BigTm\left({#1}\right)}
+\DeclareMathOperator{\BigWm}{\Omega}
+\newcommand{\BigOmega}[1]{\BigWm\left({#1}\right)}
+\DeclareMathOperator{\LittleOm}{\mathrm{o}}
+\newcommand{\LittleOh}[1]{\LittleOm\left({#1}\right)}
+\DeclareMathOperator{\LittleWm}{\omega}
+\newcommand{\LittleOmega}[1]{\LittleWm\left({#1}\right)}
+
+% argmin and argmax
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Exp}{\mathbb{E}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\sign}{\mathrm{sign\ }}
+\newcommand{\abs}{\mathrm{abs\ }}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\zo}{\{0, 1\}}
+\newcommand{\SAT}{\mathit{SAT}}
+\renewcommand{\P}{\mathbf{P}}
+\newcommand{\NP}{\mathbf{NP}}
+\newcommand{\coNP}{\co{NP}}
+\newcommand{\co}[1]{\mathbf{co#1}}
+\renewcommand{\Pr}{\mathop{\mathrm{Pr}}}
+
+% theorems, lemmas, invariants, etc.
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{invariant}[theorem]{Invariant}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{property}[theorem]{Property}
+\newtheorem{proposition}[theorem]{Proposition}
+
+% piecewise functions
+\newenvironment{piecewise}{\left\{\begin{array}{l@{,\ }l}}
+{\end{array}\right.}
+
+% paired delimiters
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\len}{|}{|}
+\DeclarePairedDelimiter{\set}{\{}{\}}
+
+\makeatletter
+\@addtoreset{equation}{section}
+\makeatother
+\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+
+% algorithms
+\algnewcommand\algorithmicinput{\textbf{INPUT:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{OUTPUT:}}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+
+
+% Formating Macros
+
+\pagestyle{fancy}
+\lhead{\sc \hmwkClass $\;\;\cdot \;\;$ \hmwkSemester $\;\;\cdot\;\;$
+Problem \hmwkAssignmentNum.\hmwkProblemNum}
+%\chead{\sc Problem \hmwkAssignmentNum.\hmwkProblemNum}
+%\chead{}
+\rhead{\em \hmwkAuthorName\ $($\hmwkAuthorID$)$}
+\cfoot{}
+\lfoot{}
+\rfoot{\sc Page\ \thepage\ of\ \protect\pageref{LastPage}}
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\fancypagestyle{fancycollab}
+{
+    \lfoot{\em Collaborators: \hmwkCollaborators}
+}
+
+\fancypagestyle{problemstatement}
+{
+    \rhead{}
+    \lfoot{}
+}
+
+%%%%%% Begin document with header and title %%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%% Header Information %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Shouldn't need to change these
+\newcommand{\hmwkClass}{COS 423}
+\newcommand{\hmwkSemester}{Spring 2013}
+
+%%% Your name, in standard First Last format
+\newcommand{\hmwkAuthorName}{Rafael Zuniga}
+%%% Your NetID
+\newcommand{\hmwkAuthorID}{rzuniga}
+
+%%% The problem set number (just the number)
+\newcommand{\hmwkAssignmentNum}{0}
+
+%%% The problem number (just the number)
+\newcommand{\hmwkProblemNum}{1}
+
+%%% A list of your collaborators' NetIDs, separated by ", ".
+%%% You can use a new line ("\\") in the middle to prevent a long
+%%% list from overflowing.
+\newcommand{\hmwkCollaborators}{Parker Watts}
+%%% Sets the collaborator list to appear on the first page
+\thispagestyle{fancycollab}
+
+%%%%%%% begin Solution %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%% begin Problem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+\section{Move-To-Front "-"}
+A broad overview of the test results are as follows:
+\subsection{correctness of Move-To-Front "-"}
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Anna-Lukas & Brenda-Josh & Brendan-Christian & Colin-Derek \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & P & P & F & F \\  % inserting body of the table
+alphanum & P & P & P & F \\
+amendments & P & P & F & F \\
+rand100k & P & P & F & F \\
+world192 & P & P & F & F \\
+zebra & P & P & P & F \\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Jiri-Ronak & Jonathan-Lyle & Parker-Rafael & Trung-Viet & Tu \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & P & F(TLE) & P & P & P\\  % inserting body of the table
+alphanum & P & P & P & P & P\\
+amendments & P & P & P & P & P\\
+rand100k & P & F(TLE) & P & P & F\\
+world192 & P & F(TLE) & P & P & P\\
+zebra & P & P & P & P & P\\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+Jonathan-Lyle: correct outputs but some of them took too long.
+
+Tu: IllegalArgumentException with rand100k
+
+\newpage
+\subsection{timing of Move-To-Front "-"}
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Anna-Lukas & Brenda-Josh & Brendan-Christian & Colin-Derek \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & 0.138 & 0.169 & - & 0.81 \\  % inserting body of the table
+alphanum & 0.1 & 0.1 & 0.106 & 0.128 \\
+amendments & 0.116 & 0.116 & - & 0.27 \\
+rand100k & 0.169 & 0.184 & - & - \\
+world192 & 0.332 & 0.732 & - & 6.655 \\
+zebra & 0.1 & 0.106 & 0.103 & 0.133 \\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Jiri-Ronak & Jonathan-Lyle & Parker-Rafael & Trung-Viet & Tu \\ [0.5ex]
+
+aesop & 0.131 & 23.773 & 0.184 & 0.147 & 0.153\\
+alphanum & 0.107 & 0.122 & 0.101 & 0.101 & 0.141\\
+amendments & 0.144 & 0.432 & 0.116 & 0.115 & 0.097\\
+rand100k & 0.148 & 8.085 & 0.147 & 0.185 & - \\
+world192 & 0.304 & 1 min+ & 0.898 & 0.332 & 0.423\\
+zebra & 0.098 & 0.13 & 0.102 & 0.111 & 0.1\\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+
+
+
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Move-To-Front "+"}
+
+\subsection{Correctness of Move-To-Front "+"}
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Anna-Lukas & Brenda-Josh & Brendan-Christian & Colin-Derek \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & P & P & P & F \\  % inserting body of the table
+alphanum & P & P & P & F \\
+amendments & P & P & P & F \\
+rand100k & P & P & F & F \\
+world192 & P & P & P & F \\
+zebra & P & P & P & F \\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Jiri-Ronak & Jonathan-Lyle & Parker-Rafael & Trung-Viet & Tu \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & P & P & P & P & P\\  % inserting body of the table
+alphanum & P & P & P & P & P\\
+amendments & P & P & P & P & P\\
+rand100k & P & P & P & P & P\\
+world192 & P & P & P & P & P\\
+zebra & P & P & P & P & P\\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+Colin-Derek: Had several NumberFormatExceptions
+
+\newpage
+\subsection{Timing of Move-To-Front "+"}
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Anna-Lukas & Brenda-Josh & Brendan-Christian & Colin-Derek \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & 0.156 & 0.163 & 0.116 & - \\
+alphanum & 0.111 & 0.104 & 0.116 & - \\
+amendments & 0.121 & 0.099 & 0.1 & - \\
+rand100k & 0.135 & 0.181 & - & - \\
+world192 & 0.263 & 0.787 & 0.272 & - \\
+zebra & 0.113 & 0.116 & 0.116 & - \\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Jiri-Ronak & Jonathan-Lyle & Parker-Rafael & Trung-Viet & Tu \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & 0.125 & 0.138 & 0.12 & 0.147 & 0.153\\
+alphanum & 0.097 & 0.1 & 0.101 & 0.12 & 0.116\\
+amendments & 0.097 & 0.131 & 0.133 & 0.118 & 0.109 \\
+rand100k & 0.133 & 0.131 & 0.147 & 0.131 & 0.176\\
+world192 & 0.221 & 0.275 & 0.217 & 0.269 & 0.416\\
+zebra & 0.097 & 0.11 & 0.107 & 0.1 & 0.131\\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{BurrowsWheeler "-"}
+\subsection{correctness of BurrowsWheeler "-"}
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c}% centered columns (9 columns)
+\hline \hline
+Test Case & Anna-Lukas & Brenda-Josh & Brendan-Christian & Colin-Derek \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & P & P & P & F \\
+alphanum & P & P & P & F \\
+amendments & P & P & P & F \\
+rand100k & P & P & - & F \\
+world192 & P & P & P & F \\
+zebra & P & P & P & F \\
+mobydick & P & P & P & - \\
+dickens & P & P & P & - \\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Jiri-Ronak & Jonathan-Lyle & Parker-Rafael & Trung-Viet & Tu \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & P & TLE & TLE & P & P\\
+alphanum & P & P & P & P & P\\
+amendments & P & P & TLE & P & P \\
+rand100k & P & TLE & TLE & P & P\\
+world192 & P & TLE & TLE & P & P\\
+zebra & P & P & P & P & P\\
+mobydick & P & TLE & TLE & P & P \\
+dickens & P & TLE & TLE & P & P\\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+
+
+\newpage
+%%%%%%%%%% Timing of BurrowsWheeler
+\subsection{Timing of BurrowsWheeler "-"}
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c}% centered columns (9 columns)
+\hline \hline
+Test Case & Anna-Lukas & Brenda-Josh & Brendan-Christian & Colin-Derek \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & 0.379 & 0.417 & 0.546 & 0.485 \\
+alphanum & 0.115 & 0.1 & 0.135 & 0.131 \\
+amendments & 0.123 & 0.153 & 0.153 & - \\
+rand100k & 0.232 & 0.247 & - & 0.332 \\
+world192 & 4.172 & 4.635 & 3.534 & 4.473 \\
+zebra & 0.102 & 0.114 & 0.146 & 0.118 \\
+mobydick & 1.616 & 1.921 & 1.551 & 1.86 \\
+dickens & 73.436 & 84.931 & 64.183 & 68.408 \\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Jiri-Ronak & Jonathan-Lyle & Parker-Rafael & Trung-Viet & Tu \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop & 0.47 & 24.27 & - & 0.364 & 0.424\\
+alphanum & 0.1 & 0.129 & 0.101 & 0.098 & 0.117\\
+amendments & 0.184 & 0.425 & - & 0.13 & 0.152 \\
+rand100k & 0.285 & 6.501 & - & 0.248 & 0.291\\
+world192 & 7.575 & - & - & 4.586 & 4.954\\
+zebra & 0.116 & 0.11 & 0.107 & 0.103 & 0.1\\
+mobydick & 3.258 & - & - & 1.739 & 1.837\\
+dickens & 139.975 & - & - & 77.738 & 77.635\\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+
+
+
+\newpage
+\section{BurrowsWheeler "+"}
+\subsection{correctness of BurrowsWheeler "+"}
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c}% centered columns (9 columns)
+\hline \hline
+Test Case & Anna-Lukas & Brenda-Josh & Brendan-Christian & Colin-Derek \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop      & P & P & F & F \\
+alphanum   & P & P & F & F \\
+amendments & P & P & F & F \\
+rand100k   & P & P & F & F \\
+world192   & P & P & F & F \\
+zebra      & P & P & P & F \\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Jiri-Ronak & Jonathan-Lyle & Parker-Rafael & Trung-Viet & Tu \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop      & P   & P & P & P & P\\
+alphanum   & P   & P & P   & P & P\\
+amendments & P   & P & P & P & P \\
+rand100k   & P   & P & P & P & P\\
+world192   & TLE & P & TLE & P & TLE\\
+zebra      & TLE & P & P   & P & P\\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+Colin-Derek: NumberFormatExceptions for each case.
+
+
+
+\newpage
+\subsection{Timing of BurrowsWheeler "+"}
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c}% centered columns (9 columns)
+\hline \hline
+
+Test Case & Anna-Lukas & Brenda-Josh & Brendan-Christian & Colin-Derek \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop      & 0.2   & 0.173 & 0.120 & - \\
+alphanum   & 0.115 & 0.101 & 0.116 & - \\
+amendments & 0.131 & 0.132 & 0.100 & - \\
+rand100k   & 0.185 & 0.153 & 0.131 & - \\
+world192   & 1.391 & 0.497 & 0.439 & - \\
+zebra      & 0.116 & 0.104 & 0.116 & - \\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+
+
+\begin{table}[ht]
+\caption{Results Pt 1}% title of Table
+\centering % used for centering table
+\begin{tabular}{c c c c c c}% centered columns (9 columns)
+\hline \hline                        %inserts double horizontal lines
+Test Case & Jiri-Ronak & Jonathan-Lyle & Parker-Rafael & Trung-Viet & Tu \\ [0.5ex]% inserts table 
+%heading
+\hline                  % inserts single horizontal line
+aesop      & 10.026 & 0.185 & 1.948 & 0.155 & 46.445\\
+alphanum   & 0.099  & 0.100 & 0.104 & 0.111 & 0.1\\
+amendments & 0.173  & 0.131 & 0.173 & 0.143 & 0.362 \\
+rand100k   & 1.807  & 0.169 & 0.212 & 0.164 & 17.196\\
+world192   & P      & 0.749 & TLE   & 0.556 & -\\
+zebra      & 0.13   & 0.114 & 0.200 & 0.169 & 0.14\\
+\hline                  %inserts single line
+\end{tabular}
+\label{table:nonlin}
+% is used to refer this table in the text
+\end{table}
+%%%%%%% end Problem %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
